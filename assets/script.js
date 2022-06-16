@@ -29,12 +29,13 @@ var currentWeather = (event) => {
 
         getCities();
 
-        getForecast();
-        $('#header-text').text(response.name);
+        getFiveDay();
+
+        // $('#header-text').text(response.name);
 
         //get results with HTML
         let currentWeatherHTML = `
-            <h3>${response.name} ${currentMoment.format("(MM/DD/YY)")}<img src="${currentWeatherIcon}"></h3>
+            <h3>${response.name} ${currentTime.format("(MM/DD/YY)")}<img src="${currentWeatherData}"></h3>
             <ul class="list-unstyled">
                 <li>Temperature: ${response.main.temp}&#8457;</li>
                 <li>Humidity: ${response.main.humidity}%</li>
@@ -79,7 +80,7 @@ var getFiveDay = (event) => {
         return response.json();
     })
     .then((response) => {
-        let getFiveDay = `
+        let fiveDayHMTL = `
         <h2>5-Day Forecast:</h2>
         <div id="fiveDayForecastUl" class="d-inline-flex flex-wrap ">`;
 
@@ -159,6 +160,7 @@ var saveCity = (newCity) => {
     }
 }
 
+//function for errors
 var checkErrors = (response) => {
     if (response.ok) {
         throw Error(response.statusText);
