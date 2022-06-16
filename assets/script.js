@@ -3,7 +3,7 @@ var APIKey = "bf35e76068825d20a4cff09151512725";
 var currentCity = "";
 var searchCity = "";
 
-var noErrors = (response) => {
+var checkErrors = (response) => {
     if (response.ok) {
         throw Error(response.statusText);
     }
@@ -18,7 +18,7 @@ var currentWeather = (event) => {
     //fetch from API
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=" + APIKey;
     fetch(queryURL)
-    .then(noErrors)
+    .then(checkErrors)
     .then((response) => {
         return response.json();
     })
@@ -30,9 +30,9 @@ var currentWeather = (event) => {
         let currentWeatherData = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
         //use moment.js
         let timeUTC = response.dt;
-        let timeZoneUpdate = response.timezone;
-        let timeZoneHours = timeZoneUpdate / 60 / 60;
-        let currentTime = moment.unix(timeUTC).utc().utcOffset(timeZoneHours);
+        let currentTimeZoneUpdate = response.timezone;
+        let currentTimeZoneHours = currentTimeZoneUpdate / 60 / 60;
+        let currentTime = moment.unix(timeUTC).utc().utcOffset(currentTimeZoneHours);
 
         getCities();
 
@@ -53,9 +53,9 @@ var currentWeather = (event) => {
 
         let latitude = response.coord.lat;
         let longitude = response.coord.lon;
-        let uvQuery = "api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + APIKey;
+        let uvQueryLink = "api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&appid=" + APIKey;
 
-        fetch(uvQuery)
+        fetch(uvQueryLink)
         .then(noErrors)
         .then ((response) => {
             return response.json();
@@ -74,8 +74,46 @@ var currentWeather = (event) => {
     })
 }
 
-var getForecast = (event) => {
 
+//function to retrieve and display five day forcast
+var getFiveDay = (event) => {
+    let city = $("#city-search").val();
+    let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=" + APIKey;
+
+    fetch(queryURL)
+    .then(checkErrors)
+    .then((response) => {
+        return response.json();
+    })
+    .then((response) => {
+        let fiveDayHMTL = '
+        <h2>Five Day Forecast:</h2>
+        <div id="fiveDayUl" class="d-inline-flex flex-wrap"></div>';
+
+        for (let i = 0; i < response.list.length; i++) {
+            let dayInfo = response.list[i];
+            let dayUTC = dayInfo.dt;
+            let dayTimeZone = response.city.timezone;
+            let dayZoneHours = dayTimeZone / 60 / 60;
+            let thisMoment = moment.unix(dayUTC).utc().utcOffset(dayZoneHours);
+            let iconURL = "https://openweathermap.org/img/w/" + dayData.weather[0].icon + ".png";
+
+            if (thisMoment.format("HH:mm:ss") === "11:00:00" || thisMoment.format("HH:mm:ss") === "12:00:00" || thisMoment.format("HH:mm:ss") === "13:00:00") {
+                fiveDayHMTL += '
+                <div class="card m-2 p0">
+                    <ul class="p-3">
+                        <li>${thisMoment.format("MM/DD/YY")}</li>
+                        <li class="weather-icon"><img src="$(iconURL}"></li>
+                        <li>Temp: ${dayInfo.main.temp}&#8457;</li>
+                        <br>
+                        <li>Humidty: ${dayInfo.main.humidty} %</li>
+                    </ul>
+                </div>';
+            }    
+        }
+        fiveDayHMTL += '</div>';
+        $("#five-day-forecast").html(fiveDayHMTL);
+    })
 }
 
 var getCities = () => {
