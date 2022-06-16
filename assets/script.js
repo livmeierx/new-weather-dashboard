@@ -3,13 +3,6 @@ var APIKey = "bf35e76068825d20a4cff09151512725";
 var currentCity = "";
 var searchCity = "";
 
-var checkErrors = (response) => {
-    if (response.ok) {
-        throw Error(response.statusText);
-    }
-    return response;
-};
-
 //function to retrieve and display current conditions 
 var currentWeather = (event) => {
     let city = $('#city-search').val();
@@ -120,22 +113,22 @@ var getFiveDay = (event) => {
 var getCities = () => {
     $('#city-results').empty();
     if (localStorage.length === 0) {
-        if (lastCity) {
-            $('#city-search').attr("value", lastCity);
+        if (searchCity) {
+            $('#city-search').attr("value", searchCity);
         } else {
             $('#city-search').attr("value", "Trenton");
         }
     } else {
         let lastCitySelected="cities"+(localStorage.length-1);
-        lastCity=localStorage.getItem(lastCitySelected);
-        $('#city-search').attr("value", lastCity);
+        searchCity=localStorage.getItem(lastCitySelected);
+        $('#city-search').attr("value", searchCity);
 
         for (let i = 0; i < localStorage.length; i++);
             let city = localStorage.getItem("cities" + i);
             let cityEl;
 
             if (currentCity==="") {
-                currentCity=lastCity;
+                currentCity=searchCity;
             }
             if (city == currentCity) {
                 cityEl = `<button type="button" class="list-group-item list-group-item-action active">${city}</button></li>`;
@@ -164,6 +157,13 @@ var saveCity = (newCity) => {
     if (cityExists == false) {
         localStorage.setItem('cities' + localStorage.length, newCity);
     }
+}
+
+var checkErrors = (response) => {
+    if (response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
 };
 
 //new city event listener

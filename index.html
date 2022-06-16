@@ -18,7 +18,7 @@
 
     <body>
         <!--header-->
-        <header class="navbar p-3">
+        <header class="navbar p-3" id="header">
             <h1 class="center" id="header-text"> Weather Dashboard <i class="fas fa-cloud-sun"></i></h1>
         </header>
 
@@ -26,7 +26,7 @@
         <div id="content" class="container">
             <div class="row">
                 <!--left container-->
-                <div id="content-left" class="col-12 col-md-4 col-lg-3">
+                <div id="content-left" class="col-md-3">
                     <form>
                         <h3 for="city-search">Search for a City</h3>
                         <div class="form-row">
@@ -39,17 +39,16 @@
                         <label>Previous Search Results</label>
                             <ul id="city-results" class="list-group mt-4"></ul>
                             <a id="clear-storage" href="#"></a>
-                        <div>
-
-                        </div>
                     </div>
                 </div>
+
                 <!--right container-->
-            <div id="content-right" class="col-12 col-md-8 col-lg-9">
+                <div id="content-right" class="col-md-9 pt-4">
                     <!--show current weather-->
                     <div id="current-weather" class="border rounded"></div>
                     <!--five day forcase-->
                     <div id="five-day" class="mt-5"></div>
+                </div>
             </div>
         </div>
     <!-- moment.js-->
@@ -59,5 +58,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!--script.js-->    
     <script src="assets/script.js"></script>
-    </body>
+    
+</body>
 </hmtl>
