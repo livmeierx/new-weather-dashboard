@@ -40,14 +40,14 @@ var currentWeather = (event) => {
         $("#header-text").text(response.name);
 
         //get results with HTML
-        let currentWeatherHTML = '
+        let currentWeatherHTML = "
             <h2>${response.name} ${currentMoment.format("(MM/DD/YY)")}<img src="${currentWeatherIcon}"></img></h2>
             <ul>
                 <li>Temperature: ${response.main.temp} &8457;</li>
                 <li>Humidty: ${response.main.humdity} %</li>
                 <li>Wind Speed: ${response.wind.speed} mph</li>
                 <li id="uvIndex">UV Index:</li>
-            </ul>';
+            </ul>;
         //append results
         $("#current-weather").html(currentWeatherHTML);
 
@@ -86,9 +86,9 @@ var getFiveDay = (event) => {
         return response.json();
     })
     .then((response) => {
-        let fiveDayHMTL = '
+        let fiveDayHMTL = "
         <h2>Five Day Forecast:</h2>
-        <div id="fiveDayUl" class="d-inline-flex flex-wrap"></div>';
+        <div id="fiveDayUl" class="d-inline-flex flex-wrap"></div>";
 
         for (let i = 0; i < response.list.length; i++) {
             let dayInfo = response.list[i];
@@ -99,16 +99,16 @@ var getFiveDay = (event) => {
             let iconURL = "https://openweathermap.org/img/w/" + dayData.weather[0].icon + ".png";
 
             if (thisMoment.format("HH:mm:ss") === "11:00:00" || thisMoment.format("HH:mm:ss") === "12:00:00" || thisMoment.format("HH:mm:ss") === "13:00:00") {
-                fiveDayHMTL += '
-                <div class="card m-2 p0">
-                    <ul class="p-3">
+                fiveDayHMTL += "
+                <div class="weather-card card m-2 p0">
+                    <ul class="list-unstyled p-3">
                         <li>${thisMoment.format("MM/DD/YY")}</li>
                         <li class="weather-icon"><img src="$(iconURL}"></li>
                         <li>Temp: ${dayInfo.main.temp}&#8457;</li>
                         <br>
                         <li>Humidty: ${dayInfo.main.humidty} %</li>
                     </ul>
-                </div>';
+                </div>";
             }    
         }
         fiveDayHMTL += '</div>';
@@ -116,10 +116,31 @@ var getFiveDay = (event) => {
     })
 }
 
+//function to get list of cities
 var getCities = () => {
 
 }
 
+//function to save info to localStorage
 var saveCity = (newCity) => {
-
+    let cityExists = false;
+    
+    for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage["cities" + i] == newCity) {
+            cityExists = true;
+            break;
+        }
+    }
+    if (cityExists == false) {
+        localStorage.setItem('cities' + localStorage.length, newCity);
+    }
 }
+
+//new city event listener
+
+//prior search event listener
+
+//clear button event listener
+
+getCities();
+currentWeather();

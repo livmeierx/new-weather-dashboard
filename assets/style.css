@@ -1,5 +1,4 @@
 /* header styling */
-
 #header {
     background-size: cover;
     background-position-y: 50%;
@@ -17,12 +16,43 @@
 }
 
 /* city search styling */
-
-city-search{
+#city-search{
     width: 80%;
 }
 
-search-button {
+#search-button {
     display: inline-block;
     width: 15px;
+}
+
+#current-weather {
+    padding-left: 15px;
+}
+
+
+/* UV Coloring */
+.uv-favorable {
+background-color: green;
+color: white;
+border-radius: 5px;
+}
+
+.uv-moderate {
+    background-color: orange;
+    color: white;
+    border-radius: 5px;
+}
+
+.uv-severe {
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+}
+
+/* weather card */
+.weather-card {
+    width: 80%;
+    background-color:#536D94;
+    color: white;
+    text-align: center;
 }
