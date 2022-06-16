@@ -12,8 +12,8 @@ var checkErrors = (response) => {
 
 //function to retrieve and display current conditions 
 var currentWeather = (event) => {
-    let city = $("#city-search").val();
-    currentCity = $("#search-city").val();
+    let city = $('#city-search').val();
+    currentCity = $('#search-city').val();
 
     //fetch from API
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=" + APIKey;
@@ -25,7 +25,7 @@ var currentWeather = (event) => {
     //save to storage 
     .then((response) => {
         saveCity(city);
-        $("#search-error").text("");
+        $('#search-error').text("");
         //create icon using api
         let currentWeatherData = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
         //use moment.js
@@ -62,13 +62,13 @@ var currentWeather = (event) => {
         })
         .then((response) => {
             let uvIndex = response.value;
-            $("#uvIndex").html('UV Index: <span id="uvVal"> ${uvIndex}</span>');
+            $('#uvIndex').html('UV Index: <span id="uvVal"> ${uvIndex}</span>');
             if (uvIndex>=0 && uvIndex<3){
-                $("#uvVal").attr("class", "uv-favorable");
+                $('#uvVal').attr("class", "uv-favorable");
             } else if (uvIndex>=3 && uvIndex<8){
-                $("#uvVal").attr("class", "uv-moderate");
+                $('#uvVal').attr("class", "uv-moderate");
             } else if (uvIndex>=8){
-                $("#uvVal").attr("class", "uv-severe");
+                $('#uvVal').attr("class", "uv-severe");
             }
         });
     })
@@ -77,7 +77,7 @@ var currentWeather = (event) => {
 
 //function to retrieve and display five day forcast
 var getFiveDay = (event) => {
-    let city = $("#city-search").val();
+    let city = $('#city-search').val();
     let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=" + APIKey;
 
     fetch(queryURL)
@@ -112,13 +112,43 @@ var getFiveDay = (event) => {
             }    
         }
         fiveDayHMTL += '</div>';
-        $("#five-day-forecast").html(fiveDayHMTL);
+        $('#five-day-forecast').html(fiveDayHMTL);
     })
 }
 
 //function to get list of cities
 var getCities = () => {
+    $('#city-results').empty();
+    if (localStorage.length === 0) {
+        if (lastCity) {
+            $('#city-search').attr("value", lastCity);
+        } else {
+            $('#city-search').attr("value", "Trenton");
+        }
+    } else {
+        let lastCitySelected="cities"+(localStorage.length-1);
+        lastCity=localStorage.getItem(lastCitySelected);
+        $('#city-search').attr("value", lastCity);
 
+        for (let i = 0; i < localStorage.length; i++);
+            let city = localStorage.getItem("cities" + i);
+            let cityEl;
+
+            if (currentCity==="") {
+                currentCity=lastCity;
+            }
+            if (city == currentCity) {
+                cityEl = `<button type="button" class="list-group-item list-group-item-action active">${city}</button></li>`;
+            } else {
+                cityEl = `<button type="button" class="list-group-item list-group-item-action">${city}</button></li>`;
+            } 
+            $('#city-results').prepend(cityEl);
+    }
+    if (localStorage.length>0) {
+        $('#clear-storage').html($('<a id="clear-storage" href="#">clear</a>'));
+    } else {
+        $('#clear-storage').html('');
+    }
 }
 
 //function to save info to localStorage
@@ -137,6 +167,11 @@ var saveCity = (newCity) => {
 }
 
 //new city event listener
+$('#search-button').on("click", (event) => {
+    event.preventDefault();
+    currentCity = $('#city-search').val();
+    getCities(event);
+});
 
 //prior search event listener
 
