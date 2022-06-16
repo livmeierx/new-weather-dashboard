@@ -3,6 +3,14 @@ var APIKey = "bf35e76068825d20a4cff09151512725";
 var currentCity = "";
 var searchCity = "";
 
+//function for errors
+var checkErrors = (response) => {
+    if (response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+};
+
 //function to retrieve and display current conditions 
 var currentWeather = (event) => {
     let city = $('#city-search').val();
@@ -30,8 +38,6 @@ var currentWeather = (event) => {
         getCities();
 
         getFiveDay();
-
-        // $('#header-text').text(response.name);
 
         //get results with HTML
         let currentWeatherHTML = `
@@ -67,7 +73,6 @@ var currentWeather = (event) => {
         });
     })
 };
-
 
 //function to retrieve and display five day forcast
 var getFiveDay = (event) => {
@@ -110,6 +115,21 @@ var getFiveDay = (event) => {
     });
 }
 
+//function to save info to localStorage
+var saveCity = (newCity) => {
+    let cityExists = false;
+    
+    for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage["cities" + i] === newCity) {
+            cityExists = true;
+            break;
+        }
+    }
+    if (cityExists === false) {
+        localStorage.setItem('cities' + localStorage.length, newCity);
+    }
+}
+
 //function to get list of cities
 var getCities = () => {
     $('#city-results').empty();
@@ -124,48 +144,27 @@ var getCities = () => {
         searchCity=localStorage.getItem(lastCitySelected);
         $('#city-search').attr("value", searchCity);
 
-        for (let i = 0; i < localStorage.length; i++);
+        for (let i = 0; i < localStorage.length; i++) {
             let city = localStorage.getItem("cities" + i);
             let cityEl;
-
-            if (currentCity==="") {
+            
+            if (currentCity===""){
                 currentCity=searchCity;
             }
-            if (city == currentCity) {
+            
+            if (city === currentCity) {
                 cityEl = `<button type="button" class="list-group-item list-group-item-action active">${city}</button></li>`;
             } else {
                 cityEl = `<button type="button" class="list-group-item list-group-item-action">${city}</button></li>`;
             } 
+            
             $('#city-results').prepend(cityEl);
-    }
+        }
     if (localStorage.length>0) {
         $('#clear-storage').html($('<a id="clear-storage" href="#">clear</a>'));
     } else {
         $('#clear-storage').html('');
     }
-};
-
-//function to save info to localStorage
-var saveCity = (newCity) => {
-    let cityExists = false;
-    
-    for (let i = 0; i < localStorage.length; i++) {
-        if (localStorage["cities" + i] == newCity) {
-            cityExists = true;
-            break;
-        }
-    }
-    if (cityExists == false) {
-        localStorage.setItem('cities' + localStorage.length, newCity);
-    }
-}
-
-//function for errors
-var checkErrors = (response) => {
-    if (response.ok) {
-        throw Error(response.statusText);
-    }
-    return response;
 };
 
 //new city event listener
@@ -191,3 +190,4 @@ $('#clear-storage').on("click", (event) => {
 
 getCities();
 currentWeather();
+}
