@@ -8,7 +8,7 @@ var checkErrors = (response) => {
         throw Error(response.statusText);
     }
     return response;
-}
+};
 
 //function to retrieve and display current conditions 
 var currentWeather = (event) => {
@@ -72,7 +72,7 @@ var currentWeather = (event) => {
             }
         });
     })
-}
+};
 
 
 //function to retrieve and display five day forcast
@@ -114,7 +114,7 @@ var getFiveDay = (event) => {
         fiveDayHMTL += '</div>';
         $('#five-day-forecast').html(fiveDayHMTL);
     })
-}
+};
 
 //function to get list of cities
 var getCities = () => {
@@ -149,7 +149,7 @@ var getCities = () => {
     } else {
         $('#clear-storage').html('');
     }
-}
+};
 
 //function to save info to localStorage
 var saveCity = (newCity) => {
@@ -164,18 +164,28 @@ var saveCity = (newCity) => {
     if (cityExists == false) {
         localStorage.setItem('cities' + localStorage.length, newCity);
     }
-}
+};
 
 //new city event listener
 $('#search-button').on("click", (event) => {
     event.preventDefault();
     currentCity = $('#city-search').val();
-    getCities(event);
+    currentWeather(event);
 });
 
 //prior search event listener
+$('#city-results').on("click", (event) => {
+    event.preventDefault();
+    $('#city-search').val(event.target.textContent);
+    currentCity=$('#city-search').val();
+    currentWeather(event);
+});
 
 //clear button event listener
+$('#clear-storage').on("click", (event) => {
+    localStorage.clear();
+    getCities();
+});
 
 getCities();
 currentWeather();
