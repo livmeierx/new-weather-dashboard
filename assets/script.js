@@ -1,18 +1,18 @@
-// assign a unique API to variable and set other variable
+// assign a unique API to variable and set other variables
 var APIKey = "bf35e76068825d20a4cff09151512725";
 var currentCity = "";
 var searchCity = "";
 
 //function for errors
-var checkErrors = (response) => {
-    if (response.ok) {
-        throw Error(response.statusText);
+var checkErrors = (Response) => {
+    if (Response.ok) {
+        throw Error(Response.statusText);
     }
-    return response;
+    return Response;
 };
 
 //function to retrieve and display current conditions 
-var currentWeather = (event) => {
+var currentWeatherConditions = (event) => {
     let city = $('#city-search').val();
     currentCity = $('#search-city').val();
 
@@ -20,24 +20,24 @@ var currentWeather = (event) => {
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=" + APIKey;
     fetch(queryURL)
     .then(checkErrors)
-    .then((response) => {
-        return response.json();
+    .then((Response) => {
+        return Response.json();
     })
     //save to storage 
-    .then((response) => {
+    .then((Response) => {
         saveCity(city);
         $('#search-error').text("");
         //create icon using api
-        let currentWeatherData = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+        let currentWeatherData = "https://openweathermap.org/img/w/" + Response.weather[0].icon + ".png";
         //use moment.js
-        let timeUTC = response.dt;
-        let currentTimeZoneUpdate = response.timezone;
+        let timeUTC = Response.dt;
+        let currentTimeZoneUpdate = Response.timezone;
         let currentTimeZoneHours = currentTimeZoneUpdate / 60 / 60;
         let currentTime = moment.unix(timeUTC).utc().utcOffset(currentTimeZoneHours);
 
         getCities();
 
-        getFiveDay();
+        getFiveDay(event);
 
         //get results with HTML
         let currentWeatherHTML = `
@@ -72,7 +72,7 @@ var currentWeather = (event) => {
             }
         });
     })
-};
+}
 
 //function to retrieve and display five day forcast
 var getFiveDay = (event) => {
@@ -171,15 +171,15 @@ var getCities = () => {
 $('#search-button').on("click", (event) => {
     event.preventDefault();
     currentCity = $('#city-search').val();
-    currentWeather(event);
+    currentWeatherConditions(event);
 });
 
 //prior search event listener
 $('#city-results').on("click", (event) => {
     event.preventDefault();
     $('#city-search').val(event.target.textContent);
-    currentCity=$('#city-search').val();
-    currentWeather(event);
+    currentCity = $('#city-search').val();
+    currentWeatherConditions(event);
 });
 
 //clear button event listener
@@ -189,5 +189,6 @@ $('#clear-storage').on("click", (event) => {
 });
 
 getCities();
-currentWeather();
+
+currentWeatherConditions();
 }
