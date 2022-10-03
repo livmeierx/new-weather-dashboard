@@ -1,3 +1,13 @@
+// declarations
+const cityNameInput = document.querySelector("#city-name");
+const searchForm = document.querySelector("#search-form");
+const currentConditionsUl = document.querySelector("#current-forecase #conditions");
+const currentConditionsH3 = document.querySelector("#current-forecase #h3");
+const previousSearches = document.querySelector("#previous-searches");
+const previousSearchContainer = document.querySelector("#previous-searches .card-body");
+const dailyCardContainer = document.querySelector("#daily-forecast");
+const fiveDayHeader = document.querySelector("#five-day");
+
 // assign a unique API to variable and set other variables
 var APIKey = "bf35e76068825d20a4cff09151512725";
 var currentCity = "";
