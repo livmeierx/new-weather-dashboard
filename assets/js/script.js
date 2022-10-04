@@ -186,30 +186,6 @@ searchForm.addEventListener("submit", (event) => {
 
 updateSearchHistory();
 
-callOpenWeather("Hawthorne, N.J.");
+callOpenWeather("Trenton, N.J.");
 
-// //new city event listener
-// $('#search-button').on("click", (event) => {
-//     event.preventDefault();
-//     currentCity = $('#city-search').val();
-//     currentWeatherConditions(event);
-// });
 
-// //prior search event listener
-// $('#city-results').on("click", (event) => {
-//     event.preventDefault();
-//     $('#city-search').val(event.target.textContent);
-//     currentCity = $('#city-search').val();
-//     currentWeatherConditions(event);
-// });
-
-// //clear button event listener
-// $('#clear-storage').on("click", (event) => {
-//     localStorage.clear();
-//     getCities();
-// });
-
-// getCities();
-
-// currentWeatherConditions();
-// }
